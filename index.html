@@ -9,13 +9,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Prompt', sans-serif; }
-        /* ปรับสไตล์เวลาพิมพ์ PDF */
+        
+        /* สไตล์พิเศษขณะสร้าง PDF / สั่งพิมพ์ */
         @media print {
             .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            .shadow-lg, .shadow-md { box-shadow: none !important; }
-            .border-mobile { border: 1px solid #cbd5e1 !important; }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            #report-area {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 15px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
         }
+        
+        /* สไตล์คลาสสำหรับซ่อนปุ่ม + - ชั่วคราวตอนเจน PDF */
+        .rendering-pdf .no-print {
+            display: none !important;
+        }
+        .rendering-pdf #report-area {
+            box-shadow: none !important;
+            border: 1px solid #e2e8f0 !important;
+            width: 750px !important; /* ล็อกความกว้างพอดี A4 */
+            padding: 24px !important;
+            margin: 0 auto !important;
+            background: #ffffff !important;
+        }
+
         /* ซ่อนปุ่มลูกศรเพิ่มลดใน input number */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
@@ -29,127 +49,127 @@
 
     <div class="max-w-3xl mx-auto bg-white p-4 sm:p-8 rounded-2xl shadow-lg border border-slate-200" id="report-area">
         
-        <div class="border-b-2 border-slate-800 pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div class="border-b-2 border-slate-800 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold text-slate-800">รายงานการใช้นมประจำวัน</h1>
-                <p class="text-xs sm:text-sm text-slate-500">แบบฟอร์มตรวจสอบและบันทึกปริมาณวัตถุดิบนมประจำวัน</p>
+                <p class="text-xs text-slate-500">แบบฟอร์มตรวจสอบและบันทึกปริมาณวัตถุดิบนมประจำวัน</p>
             </div>
             <div class="w-full sm:w-auto text-left sm:text-right">
-                <span class="inline-block bg-blue-600 text-white font-medium text-xs sm:text-sm px-3 py-1.5 rounded-lg shadow-sm">
+                <span class="inline-block bg-blue-600 text-white font-medium text-xs sm:text-sm px-3 py-1 rounded-lg shadow-sm">
                     📍 สาขาสนามกีฬาแห่งชาติ
                 </span>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">ประจำวันที่:</label>
-                <input type="date" id="record-date" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <input type="date" id="record-date" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อผู้บันทึกข้อมูล:</label>
-                <input type="text" id="staff-name" placeholder="ระบุชื่อพนักงาน" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <input type="text" id="staff-name" placeholder="ระบุชื่อพนักงาน" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
             </div>
         </div>
 
-        <div class="overflow-x-auto mb-6 rounded-xl border border-slate-300">
+        <div class="overflow-x-auto mb-4 rounded-xl border border-slate-300">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-sky-200 text-slate-800 font-semibold text-xs sm:text-sm">
-                        <th class="p-2 sm:p-3 text-center border-b border-slate-300 w-12 sm:w-16">ตัวย่อ</th>
-                        <th class="p-2 sm:p-3 border-b border-slate-300">เมนู</th>
-                        <th class="p-2 sm:p-3 text-center border-b border-slate-300 w-20 sm:w-28">สูตร/ขวด</th>
-                        <th class="p-2 sm:p-3 text-center border-b border-slate-300 w-36 sm:w-44">จำนวนขวด</th>
-                        <th class="p-2 sm:p-3 text-right border-b border-slate-300 w-24 sm:w-32">รวม (กรัม)</th>
+                        <th class="p-2 text-center border-b border-slate-300 w-12">ตัวย่อ</th>
+                        <th class="p-2 border-b border-slate-300">เมนู</th>
+                        <th class="p-2 text-center border-b border-slate-300 w-24">สูตร/ขวด</th>
+                        <th class="p-2 text-center border-b border-slate-300 w-36">จำนวนขวด</th>
+                        <th class="p-2 text-right border-b border-slate-300 w-28">รวม (กรัม)</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 text-slate-700 text-xs sm:text-sm">
                     
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-200">La</td>
-                        <td class="p-2 sm:p-3 font-medium border-r border-slate-200">ลาเต้</td>
-                        <td class="p-2 sm:p-3 text-center text-slate-500 border-r border-slate-200">175 กรัม</td>
-                        <td class="p-1.5 sm:p-2 border-r border-slate-200">
+                        <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">La</td>
+                        <td class="p-2 font-medium border-r border-slate-200">ลาเต้</td>
+                        <td class="p-2 text-center text-slate-500 border-r border-slate-200">175 กรัม</td>
+                        <td class="p-1.5 border-r border-slate-200 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button type="button" onclick="adjustQty('qty-la', -1)" class="no-print w-8 h-8 rounded-lg bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-base flex items-center justify-center select-none">-</button>
-                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-la" value="0" oninput="calculateTotal()" class="w-12 sm:w-16 text-center border border-slate-300 rounded-lg py-1 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                <button type="button" onclick="adjustQty('qty-la', 1)" class="no-print w-8 h-8 rounded-lg bg-blue-100 active:bg-blue-200 text-blue-700 font-bold text-base flex items-center justify-center select-none">+</button>
+                                <button type="button" onclick="adjustQty('qty-la', -1)" class="no-print w-7 h-7 rounded bg-slate-200 active:bg-slate-300 text-slate-700 font-bold flex items-center justify-center select-none">-</button>
+                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-la" value="0" oninput="calculateTotal()" class="w-12 text-center border border-slate-300 rounded py-0.5 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <button type="button" onclick="adjustQty('qty-la', 1)" class="no-print w-7 h-7 rounded bg-blue-100 active:bg-blue-200 text-blue-700 font-bold flex items-center justify-center select-none">+</button>
                             </div>
                         </td>
-                        <td class="p-2 sm:p-3 text-right font-semibold text-slate-800" id="total-la">0</td>
+                        <td class="p-2 text-right font-semibold text-slate-800" id="total-la">0 g</td>
                     </tr>
 
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-200">Es</td>
-                        <td class="p-2 sm:p-3 font-medium border-r border-slate-200">เอสเพรสโซ่</td>
-                        <td class="p-2 sm:p-3 text-center text-slate-500 border-r border-slate-200">45 กรัม</td>
-                        <td class="p-1.5 sm:p-2 border-r border-slate-200">
+                        <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">Es</td>
+                        <td class="p-2 font-medium border-r border-slate-200">เอสเพรสโซ่</td>
+                        <td class="p-2 text-center text-slate-500 border-r border-slate-200">45 กรัม</td>
+                        <td class="p-1.5 border-r border-slate-200 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button type="button" onclick="adjustQty('qty-es', -1)" class="no-print w-8 h-8 rounded-lg bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-base flex items-center justify-center select-none">-</button>
-                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-es" value="0" oninput="calculateTotal()" class="w-12 sm:w-16 text-center border border-slate-300 rounded-lg py-1 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                <button type="button" onclick="adjustQty('qty-es', 1)" class="no-print w-8 h-8 rounded-lg bg-blue-100 active:bg-blue-200 text-blue-700 font-bold text-base flex items-center justify-center select-none">+</button>
+                                <button type="button" onclick="adjustQty('qty-es', -1)" class="no-print w-7 h-7 rounded bg-slate-200 active:bg-slate-300 text-slate-700 font-bold flex items-center justify-center select-none">-</button>
+                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-es" value="0" oninput="calculateTotal()" class="w-12 text-center border border-slate-300 rounded py-0.5 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <button type="button" onclick="adjustQty('qty-es', 1)" class="no-print w-7 h-7 rounded bg-blue-100 active:bg-blue-200 text-blue-700 font-bold flex items-center justify-center select-none">+</button>
                             </div>
                         </td>
-                        <td class="p-2 sm:p-3 text-right font-semibold text-slate-800" id="total-es">0</td>
+                        <td class="p-2 text-right font-semibold text-slate-800" id="total-es">0 g</td>
                     </tr>
 
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-200">St</td>
-                        <td class="p-2 sm:p-3 font-medium border-r border-slate-200">สตรอว์เบอร์รี่</td>
-                        <td class="p-2 sm:p-3 text-center text-slate-500 border-r border-slate-200">200 กรัม</td>
-                        <td class="p-1.5 sm:p-2 border-r border-slate-200">
+                        <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">St</td>
+                        <td class="p-2 font-medium border-r border-slate-200">สตรอว์เบอร์รี่</td>
+                        <td class="p-2 text-center text-slate-500 border-r border-slate-200">200 กรัม</td>
+                        <td class="p-1.5 border-r border-slate-200 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button type="button" onclick="adjustQty('qty-st', -1)" class="no-print w-8 h-8 rounded-lg bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-base flex items-center justify-center select-none">-</button>
-                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-st" value="0" oninput="calculateTotal()" class="w-12 sm:w-16 text-center border border-slate-300 rounded-lg py-1 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                <button type="button" onclick="adjustQty('qty-st', 1)" class="no-print w-8 h-8 rounded-lg bg-blue-100 active:bg-blue-200 text-blue-700 font-bold text-base flex items-center justify-center select-none">+</button>
+                                <button type="button" onclick="adjustQty('qty-st', -1)" class="no-print w-7 h-7 rounded bg-slate-200 active:bg-slate-300 text-slate-700 font-bold flex items-center justify-center select-none">-</button>
+                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-st" value="0" oninput="calculateTotal()" class="w-12 text-center border border-slate-300 rounded py-0.5 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <button type="button" onclick="adjustQty('qty-st', 1)" class="no-print w-7 h-7 rounded bg-blue-100 active:bg-blue-200 text-blue-700 font-bold flex items-center justify-center select-none">+</button>
                             </div>
                         </td>
-                        <td class="p-2 sm:p-3 text-right font-semibold text-slate-800" id="total-st">0</td>
+                        <td class="p-2 text-right font-semibold text-slate-800" id="total-st">0 g</td>
                     </tr>
 
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-200">Mt</td>
-                        <td class="p-2 sm:p-3 font-medium border-r border-slate-200">มัทฉะ</td>
-                        <td class="p-2 sm:p-3 text-center text-slate-500 border-r border-slate-200">50 กรัม</td>
-                        <td class="p-1.5 sm:p-2 border-r border-slate-200">
+                        <td class="p-2 text-center font-bold text-slate-900 border-r border-slate-200">Mt</td>
+                        <td class="p-2 font-medium border-r border-slate-200">มัทฉะ</td>
+                        <td class="p-2 text-center text-slate-500 border-r border-slate-200">50 กรัม</td>
+                        <td class="p-1.5 border-r border-slate-200 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button type="button" onclick="adjustQty('qty-mt', -1)" class="no-print w-8 h-8 rounded-lg bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-base flex items-center justify-center select-none">-</button>
-                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-mt" value="0" oninput="calculateTotal()" class="w-12 sm:w-16 text-center border border-slate-300 rounded-lg py-1 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                                <button type="button" onclick="adjustQty('qty-mt', 1)" class="no-print w-8 h-8 rounded-lg bg-blue-100 active:bg-blue-200 text-blue-700 font-bold text-base flex items-center justify-center select-none">+</button>
+                                <button type="button" onclick="adjustQty('qty-mt', -1)" class="no-print w-7 h-7 rounded bg-slate-200 active:bg-slate-300 text-slate-700 font-bold flex items-center justify-center select-none">-</button>
+                                <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" id="qty-mt" value="0" oninput="calculateTotal()" class="w-12 text-center border border-slate-300 rounded py-0.5 text-slate-800 font-semibold focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <button type="button" onclick="adjustQty('qty-mt', 1)" class="no-print w-7 h-7 rounded bg-blue-100 active:bg-blue-200 text-blue-700 font-bold flex items-center justify-center select-none">+</button>
                             </div>
                         </td>
-                        <td class="p-2 sm:p-3 text-right font-semibold text-slate-800" id="total-mt">0</td>
+                        <td class="p-2 text-right font-semibold text-slate-800" id="total-mt">0 g</td>
                     </tr>
 
                 </tbody>
                 <tfoot>
-                    <tr class="bg-blue-50 font-bold text-slate-800 text-xs sm:text-base border-t-2 border-slate-300">
-                        <td colspan="4" class="p-3 text-center sm:text-right border-r border-slate-200">รวมปริมาณใช้นมทั้งหมดประจำวัน:</td>
-                        <td class="p-3 text-right text-blue-700 font-bold" id="grand-total">0 กรัม</td>
+                    <tr class="bg-blue-50 font-bold text-slate-800 text-xs sm:text-sm border-t-2 border-slate-300">
+                        <td colspan="4" class="p-2 text-center sm:text-right border-r border-slate-200">รวมปริมาณใช้นมทั้งหมดประจำวัน:</td>
+                        <td class="p-2 text-right text-blue-700 font-bold" id="grand-total">0 กรัม</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-slate-300 grid grid-cols-2 gap-4 sm:gap-8 text-center text-xs sm:text-sm text-slate-700">
+        <div class="mt-6 pt-4 border-t border-slate-300 grid grid-cols-2 gap-4 text-center text-xs sm:text-sm text-slate-700">
             <div>
-                <p class="mb-10 sm:mb-14">ลงชื่อ ...........................................................</p>
+                <p class="mb-8">ลงชื่อ ...........................................................</p>
                 <p class="font-medium">( <span id="sign-staff-name">...................................................</span> )</p>
-                <p class="text-xs text-slate-500 mt-1">ผู้บันทึกข้อมูล</p>
+                <p class="text-xs text-slate-500 mt-0.5">ผู้บันทึกข้อมูล</p>
             </div>
             <div>
-                <p class="mb-10 sm:mb-14">ลงชื่อ ...........................................................</p>
+                <p class="mb-8">ลงชื่อ ...........................................................</p>
                 <p class="font-medium">( ................................................... )</p>
-                <p class="text-xs text-slate-500 mt-1">ผู้จัดการร้าน (ผู้อนุมัติ/ตรวจสอบ)</p>
+                <p class="text-xs text-slate-500 mt-0.5">ผู้จัดการร้าน (ผู้อนุมัติ/ตรวจสอบ)</p>
             </div>
         </div>
 
-        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-end no-print">
-            <button type="button" onclick="saveToGoogleSheets()" id="btn-save" class="w-full sm:w-auto bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-medium px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm sm:text-base">
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-end no-print">
+            <button type="button" onclick="saveToGoogleSheets()" id="btn-save" class="w-full sm:w-auto bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-medium px-5 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                 บันทึกเข้า Google Sheets
             </button>
-            <button type="button" onclick="exportToPDF()" class="w-full sm:w-auto bg-blue-600 active:bg-blue-700 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm sm:text-base">
+            <button type="button" onclick="exportToPDF()" id="btn-pdf" class="w-full sm:w-auto bg-blue-600 active:bg-blue-700 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 ดาวน์โหลด PDF
             </button>
@@ -158,7 +178,6 @@
     </div>
 
     <script>
-        // URL Google Apps Script ของคุณ
         const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGDSI4MencXOxFa1nz0YkYmx9At4ZfXwPhIlWbN9jLZ1Wf-06qoy0AVq8fLJYCO5KvlA/exec";
         const BRANCH_NAME = "สาขาสนามกีฬาแห่งชาติ";
 
@@ -236,20 +255,44 @@
             }
         }
 
-        // ฟังก์ชันส่งออกเอกสาร PDF
-        function exportToPDF() {
+        // ฟังก์ชันส่งออกเอกสาร PDF หน้าเดียวพอดี ไม่เบี้ยว ไม่หลุดขอบ
+        async function exportToPDF() {
             const element = document.getElementById('report-area');
             const dateStr = document.getElementById('record-date').value || 'report';
-            
+            const btnPdf = document.getElementById('btn-pdf');
+
+            btnPdf.disabled = true;
+            btnPdf.innerText = "กำลังสร้าง PDF...";
+
+            // ใส่คลาสจัดรูปเล่มสำหรับ PDF
+            document.body.classList.add('rendering-pdf');
+
             const opt = {
-                margin:       8,
+                margin:       [10, 10, 10, 10], // ขอบ บน, ซ้าย, ล่าง, ขวา (มม.)
                 filename:     `รายงานใช้นม_สาขาสนามกีฬาแห่งชาติ_${dateStr}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 800 // ตั้งค่าความกว้างจำลองเพื่อความเสถียร
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: 'avoid-all' } // ป้องกันขึ้นหน้าใหม่
             };
 
-            html2pdf().set(opt).from(element).save();
+            try {
+                await html2pdf().set(opt).from(element).save();
+            } catch (err) {
+                console.error("PDF Export Error:", err);
+                alert("เกิดข้อผิดพลาดในการสร้างไฟล์ PDF");
+            } finally {
+                // คืนค่ารูปแบบสไตล์หน้าเว็บปกติ
+                document.body.classList.remove('rendering-pdf');
+                btnPdf.disabled = false;
+                btnPdf.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> ดาวน์โหลด PDF`;
+            }
         }
     </script>
 </body>
